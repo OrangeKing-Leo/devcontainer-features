@@ -1,0 +1,35 @@
+{
+  "id": "codegraph",
+  "version": "1.0.0",
+  "name": "CodeGraph CLI",
+  "description": "Installs the CodeGraph CLI (@colbymchenry/codegraph) — a pre-indexed code knowledge graph for Claude Code, Codex, Cursor, Gemini, OpenCode, Antigravity, Kiro, and Hermes Agent.",
+  "documentationURL": "https://github.com/OrangeKing-Leo/devcontainer-features/tree/main/src/codegraph",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "latest",
+      "description": "Version of @colbymchenry/codegraph to install (npm dist-tag or semver, e.g. 'latest', '1.0.0')."
+    },
+    "installNode": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install Node.js (via NodeSource) if 'node' is not already on PATH. Disable if you supply Node yourself."
+    },
+    "nodeVersion": {
+      "type": "string",
+      "default": "20",
+      "description": "Major Node.js version to install when installNode is true (e.g. '18', '20', '22')."
+    },
+    "wireAgents": {
+      "type": "string",
+      "enum": ["none", "all", "claude-code", "codex", "cursor", "opencode", "hermes", "gemini", "antigravity", "kiro"],
+      "default": "none",
+      "description": "Run `codegraph install --target <value> --yes` at build time to wire CodeGraph's MCP server into the chosen agent(s). 'none' skips wiring; 'all' wires every detected agent. Note: agents must already be installed in the image for wiring to succeed."
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils",
+    "ghcr.io/devcontainers/features/node",
+    "ghcr.io/orangeking-leo/devcontainer-features/claude-code"
+  ]
+}

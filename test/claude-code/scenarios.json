@@ -1,0 +1,18 @@
+{
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "claude-code": {}
+        }
+    },
+    "with_settings": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "remoteUser": "vscode",
+        "features": {
+            "claude-code": {
+                "version": "latest",
+                "installSettings": true
+            }
+        }
+    }
+}

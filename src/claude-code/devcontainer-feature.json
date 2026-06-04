@@ -1,0 +1,43 @@
+{
+  "id": "claude-code",
+  "version": "1.0.0",
+  "name": "Claude Code CLI",
+  "description": "Installs Anthropic's Claude Code CLI (@anthropic-ai/claude-code) via npm, with optional Node.js auto-install and a starter settings.json.",
+  "documentationURL": "https://github.com/OrangeKing-Leo/devcontainer-features/tree/main/src/claude-code",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "latest",
+      "description": "Version of @anthropic-ai/claude-code to install (npm dist-tag or semver, e.g. 'latest', '1.0.0')."
+    },
+    "installNode": {
+      "type": "boolean",
+      "default": true,
+      "description": "Install Node.js (via NodeSource) if 'node' is not already on PATH. Disable if you supply Node yourself."
+    },
+    "nodeVersion": {
+      "type": "string",
+      "default": "20",
+      "description": "Major Node.js version to install when installNode is true (e.g. '18', '20', '22')."
+    },
+    "installSettings": {
+      "type": "boolean",
+      "default": false,
+      "description": "Write a starter ~/.claude/settings.json for the remote user if one does not exist."
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils",
+    "ghcr.io/devcontainers/features/node"
+  ],
+  "containerEnv": {
+    "CLAUDE_CODE_AUTO_UPDATE": "0"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "anthropic.claude-code"
+      ]
+    }
+  }
+}
