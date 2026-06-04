@@ -2,14 +2,15 @@
   "id": "dev-extensions",
   "version": "1.0.0",
   "name": "Common Dev VS Code Extensions",
-  "description": "Installs GitLens (line-level git blame, file history, code authorship) plus the VS Code Simplified Chinese language pack.",
+  "description": "Installs GitLens (line-level git blame, file history, code authorship), the VS Code Simplified Chinese language pack, and Mermaid diagram rendering in the Markdown preview.",
   "documentationURL": "https://github.com/OrangeKing-Leo/devcontainer-features/tree/main/src/dev-extensions",
   "options": {},
   "customizations": {
     "vscode": {
       "extensions": [
         "eamodio.gitlens",
-        "ms-ceintl.vscode-language-pack-zh-hans"
+        "ms-ceintl.vscode-language-pack-zh-hans",
+        "bierner.markdown-mermaid"
       ]
     }
   }
