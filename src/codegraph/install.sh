@@ -4,7 +4,6 @@ set -euo pipefail
 VERSION="${VERSION:-latest}"
 INSTALLNODE="${INSTALLNODE:-true}"
 NODEVERSION="${NODEVERSION:-20}"
-WIREAGENTS="${WIREAGENTS:-none}"
 INSTALLCGIALIAS="${INSTALLCGIALIAS:-false}"
 
 if [ "$(id -u)" -ne 0 ]; then
@@ -21,17 +20,6 @@ apt_get_update() {
 ensure_pkgs() {
     apt_get_update
     apt-get -o Acquire::Retries=5 install -y --no-install-recommends "$@"
-}
-
-detect_user() {
-    local candidates=("${_REMOTE_USER:-}" "${USERNAME:-}" vscode node codespace ubuntu)
-    for u in "${candidates[@]}"; do
-        if [ -n "$u" ] && id -u "$u" >/dev/null 2>&1; then
-            echo "$u"
-            return 0
-        fi
-    done
-    echo "root"
 }
 
 install_node_if_missing() {
@@ -61,29 +49,6 @@ install_codegraph() {
     echo "Installed: $(codegraph --version 2>/dev/null || echo 'codegraph command not on PATH yet')"
 }
 
-wire_agents() {
-    local target="${WIREAGENTS,,}"
-    [ "$target" = "none" ] || [ -z "$target" ] && { echo "Skipping agent wiring (wireAgents=none)."; return 0; }
-
-    local user home
-    user="$(detect_user)"
-    if [ "$user" = "root" ]; then
-        home="/root"
-    else
-        home="$(getent passwd "$user" | cut -d: -f6)"
-    fi
-
-    local cmd="codegraph install --yes"
-    [ "$target" != "all" ] && cmd="${cmd} --target ${target}"
-
-    echo "Wiring CodeGraph into agent(s): ${target} (as ${user})..."
-    if [ "$user" = "root" ]; then
-        eval "$cmd" || echo "WARN: 'codegraph install' did not complete cleanly — agent may not be present in image."
-    else
-        su - "$user" -c "$cmd" || echo "WARN: 'codegraph install' did not complete cleanly — agent may not be present in image."
-    fi
-}
-
 install_cgi_alias() {
     [ "${INSTALLCGIALIAS,,}" = "true" ] || return 0
     local alias_file="/etc/profile.d/codegraph-aliases.sh"
@@ -108,7 +73,6 @@ SH
 main() {
     install_node_if_missing
     install_codegraph
-    wire_agents
     install_cgi_alias
     echo "codegraph feature install complete."
 }

@@ -10,7 +10,7 @@ Additions to the official [Dev Container Features](https://containers.dev/featur
 |---------|--------------|
 | [`claude-code`](./src/claude-code) | Installs Anthropic's Claude Code CLI (`@anthropic-ai/claude-code`) via npm. Optional Node bootstrap and `ccd` shell alias. |
 | [`codex`](./src/codex) | Installs OpenAI's Codex CLI (`@openai/codex`) via npm. Optional Node bootstrap and `cxd` shell alias. |
-| [`codegraph`](./src/codegraph) | Installs [CodeGraph](https://github.com/colbymchenry/codegraph) (`@colbymchenry/codegraph`) — pre-indexed code knowledge graph for Claude Code, Codex, Cursor, Gemini, OpenCode, Antigravity, Kiro, Hermes. Auto-wires the MCP server into any of those agents, plus `cgi` alias. |
+| [`codegraph`](./src/codegraph) | Installs [CodeGraph](https://github.com/colbymchenry/codegraph) (`@colbymchenry/codegraph`) — pre-indexed code knowledge graph for Claude Code, Codex, Cursor, Gemini, OpenCode, Antigravity, Kiro, Hermes. Optional `cgi` shell alias. |
 
 ### Sandbox & editor
 
@@ -30,9 +30,7 @@ Reference any feature in your `devcontainer.json` via its `ghcr.io` ref:
     "features": {
         "ghcr.io/orangeking-leo/devcontainer-features/claude-code:1": {},
         "ghcr.io/orangeking-leo/devcontainer-features/codex:1": {},
-        "ghcr.io/orangeking-leo/devcontainer-features/codegraph:1": {
-            "wireAgents": "all"
-        },
+        "ghcr.io/orangeking-leo/devcontainer-features/codegraph:1": {},
         "ghcr.io/orangeking-leo/devcontainer-features/dev-extensions:1": {}
     }
 }
@@ -74,7 +72,7 @@ If you want an isolated container for letting Claude Code / Codex run with permi
         "ghcr.io/orangeking-leo/devcontainer-features/harden-sandbox:1": {},
         "ghcr.io/orangeking-leo/devcontainer-features/claude-code:1":   { "installCcdAlias": true },
         "ghcr.io/orangeking-leo/devcontainer-features/codex:1":         { "installCxdAlias": true },
-        "ghcr.io/orangeking-leo/devcontainer-features/codegraph:1":     { "installCgiAlias": true, "wireAgents": "all" },
+        "ghcr.io/orangeking-leo/devcontainer-features/codegraph:1":     { "installCgiAlias": true },
         "ghcr.io/orangeking-leo/devcontainer-features/dev-extensions:1": {}
     }
 }

@@ -14,22 +14,12 @@ Not supported on Alpine.
 
 ## Wiring agents
 
-The `wireAgents` option runs `codegraph install --target <value> --yes` during build. For this to succeed **the target agent must already be installed in the image**:
+After the container is built, run `codegraph install` inside the container to wire CodeGraph's MCP server into whichever agents are present (Claude Code, Codex, Cursor, etc.). This feature deliberately does not run that at build time — wiring writes to the user's home (`~/.claude`, `~/.codex`, …), which is often mounted as a named volume that doesn't exist yet during image build.
 
-- For Claude Code, pair this feature with [`claude-code`](../claude-code) (it is declared in `installsAfter` so ordering is correct):
-
-    ```jsonc
-    "features": {
-        "ghcr.io/orangeking-leo/devcontainer-features/claude-code:1": {},
-        "ghcr.io/orangeking-leo/devcontainer-features/codegraph:1": {
-            "wireAgents": "claude-code"
-        }
-    }
-    ```
-
-- If the agent is not present at build time, wiring is skipped with a warning. You can wire it later from inside the container with `codegraph install`.
-
-`wireAgents: "all"` runs the auto-detect flow against every agent CodeGraph knows about — only ones actually installed will be configured.
+```bash
+codegraph install            # auto-detect all installed agents
+codegraph install --target claude-code --yes   # just one, non-interactive
+```
 
 ## Per-project index
 
