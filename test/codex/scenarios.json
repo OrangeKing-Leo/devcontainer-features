@@ -5,16 +5,6 @@
             "codex": {}
         }
     },
-    "with_config": {
-        "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
-        "remoteUser": "vscode",
-        "features": {
-            "codex": {
-                "version": "latest",
-                "installConfig": true
-            }
-        }
-    },
     "with_cxd_alias": {
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
         "remoteUser": "vscode",

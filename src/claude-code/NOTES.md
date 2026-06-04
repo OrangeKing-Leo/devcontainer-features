@@ -26,7 +26,6 @@ to authenticate interactively. Credentials are stored under `~/.claude` for the 
 
 `CLAUDE_CODE_AUTO_UPDATE=0` is exported via `containerEnv` so the version installed at build time is not silently replaced at runtime. To upgrade, rebuild the container after bumping the `version` option.
 
-## Known limitations
+## Per-user configuration
 
-- The `installSettings` option will **not** overwrite an existing `~/.claude/settings.json`.
-- When running as `root` (no remote user detected), the starter settings are written to `/root/.claude/settings.json`.
+Claude Code reads `~/.claude/settings.json` for permissions / hooks / preferences. This feature deliberately does not seed that file — manage it yourself (commit a template in your project, mount a named volume across rebuilds, or run `claude` interactively to let it write its own).

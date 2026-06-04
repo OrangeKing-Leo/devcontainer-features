@@ -8,8 +8,8 @@ Additions to the official [Dev Container Features](https://containers.dev/featur
 
 | Feature | What it does |
 |---------|--------------|
-| [`claude-code`](./src/claude-code) | Installs Anthropic's Claude Code CLI (`@anthropic-ai/claude-code`) via npm. Optional Node bootstrap, starter `settings.json`, and `ccd` shell alias. |
-| [`codex`](./src/codex) | Installs OpenAI's Codex CLI (`@openai/codex`) via npm. Optional Node bootstrap, starter `config.toml`, and `cxd` shell alias. |
+| [`claude-code`](./src/claude-code) | Installs Anthropic's Claude Code CLI (`@anthropic-ai/claude-code`) via npm. Optional Node bootstrap and `ccd` shell alias. |
+| [`codex`](./src/codex) | Installs OpenAI's Codex CLI (`@openai/codex`) via npm. Optional Node bootstrap and `cxd` shell alias. |
 | [`codegraph`](./src/codegraph) | Installs [CodeGraph](https://github.com/colbymchenry/codegraph) (`@colbymchenry/codegraph`) — pre-indexed code knowledge graph for Claude Code, Codex, Cursor, Gemini, OpenCode, Antigravity, Kiro, Hermes. Auto-wires the MCP server into any of those agents, plus `cgi` alias. |
 
 ### Sandbox & editor
@@ -106,7 +106,7 @@ You can also reference a local feature path directly from a project's `devcontai
 
 ```jsonc
 "features": {
-    "./src/claude-code": { "installSettings": true }
+    "./src/claude-code": { "installCcdAlias": true }
 }
 ```
 

@@ -5,16 +5,6 @@
             "claude-code": {}
         }
     },
-    "with_settings": {
-        "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
-        "remoteUser": "vscode",
-        "features": {
-            "claude-code": {
-                "version": "latest",
-                "installSettings": true
-            }
-        }
-    },
     "with_ccd_alias": {
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
         "remoteUser": "vscode",

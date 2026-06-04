@@ -22,11 +22,6 @@ codex login
 
 to authenticate interactively (ChatGPT account or `OPENAI_API_KEY`). Credentials are stored under `~/.codex` for the remote user. To use an API key non-interactively, set `OPENAI_API_KEY` via your `devcontainer.json` `remoteEnv` / `containerEnv`.
 
-## Starter config
+## Per-user configuration
 
-When `installConfig` is true, a commented `~/.codex/config.toml` is written (only if absent). Uncomment lines to set the default `model`, `approval_policy`, or `sandbox_mode`. See the [Codex docs](https://github.com/openai/codex) for the full schema.
-
-## Known limitations
-
-- `installConfig` will **not** overwrite an existing `~/.codex/config.toml`.
-- When running as `root` (no remote user detected), the starter config is written to `/root/.codex/config.toml`.
+Codex reads `~/.codex/config.toml` for default `model`, `approval_policy`, `sandbox_mode`, etc. This feature does not seed that file — manage it yourself or let `codex` write its own on first run. See the [Codex docs](https://github.com/openai/codex) for the full schema.

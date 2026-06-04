@@ -4,7 +4,6 @@ set -euo pipefail
 VERSION="${VERSION:-latest}"
 INSTALLNODE="${INSTALLNODE:-true}"
 NODEVERSION="${NODEVERSION:-20}"
-INSTALLSETTINGS="${INSTALLSETTINGS:-false}"
 INSTALLCCDALIAS="${INSTALLCCDALIAS:-false}"
 
 if [ "$(id -u)" -ne 0 ]; then
@@ -21,17 +20,6 @@ apt_get_update() {
 ensure_pkgs() {
     apt_get_update
     apt-get -o Acquire::Retries=5 install -y --no-install-recommends "$@"
-}
-
-detect_user() {
-    local candidates=("${_REMOTE_USER:-}" "${USERNAME:-}" vscode node codespace ubuntu)
-    for u in "${candidates[@]}"; do
-        if [ -n "$u" ] && id -u "$u" >/dev/null 2>&1; then
-            echo "$u"
-            return 0
-        fi
-    done
-    echo "root"
 }
 
 install_node_if_missing() {
@@ -59,36 +47,6 @@ install_claude_code() {
     echo "Installing ${spec} globally via npm..."
     npm install -g --no-audit --no-fund "$spec"
     echo "Installed: $(claude --version 2>/dev/null || echo 'claude command not on PATH yet')"
-}
-
-write_starter_settings() {
-    [ "${INSTALLSETTINGS,,}" = "true" ] || return 0
-    local user home settings
-    user="$(detect_user)"
-    if [ "$user" = "root" ]; then
-        home="/root"
-    else
-        home="$(getent passwd "$user" | cut -d: -f6)"
-    fi
-    settings="${home}/.claude/settings.json"
-    if [ -f "$settings" ]; then
-        echo "Existing ${settings} found — leaving untouched."
-        return 0
-    fi
-    install -d -m 0755 "${home}/.claude"
-    cat > "$settings" <<'JSON'
-{
-  "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "permissions": {
-    "allow": [],
-    "deny": []
-  }
-}
-JSON
-    if [ "$user" != "root" ]; then
-        chown -R "$user:$(id -gn "$user")" "${home}/.claude"
-    fi
-    echo "Wrote starter settings to ${settings}"
 }
 
 install_ccd_alias() {
@@ -119,7 +77,6 @@ SH
 main() {
     install_node_if_missing
     install_claude_code
-    write_starter_settings
     install_ccd_alias
     echo "claude-code feature install complete."
 }

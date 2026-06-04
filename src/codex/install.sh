@@ -4,7 +4,6 @@ set -euo pipefail
 VERSION="${VERSION:-latest}"
 INSTALLNODE="${INSTALLNODE:-true}"
 NODEVERSION="${NODEVERSION:-20}"
-INSTALLCONFIG="${INSTALLCONFIG:-false}"
 INSTALLCXDALIAS="${INSTALLCXDALIAS:-false}"
 
 if [ "$(id -u)" -ne 0 ]; then
@@ -21,17 +20,6 @@ apt_get_update() {
 ensure_pkgs() {
     apt_get_update
     apt-get -o Acquire::Retries=5 install -y --no-install-recommends "$@"
-}
-
-detect_user() {
-    local candidates=("${_REMOTE_USER:-}" "${USERNAME:-}" vscode node codespace ubuntu)
-    for u in "${candidates[@]}"; do
-        if [ -n "$u" ] && id -u "$u" >/dev/null 2>&1; then
-            echo "$u"
-            return 0
-        fi
-    done
-    echo "root"
 }
 
 install_node_if_missing() {
@@ -61,35 +49,6 @@ install_codex() {
     echo "Installed: $(codex --version 2>/dev/null || echo 'codex command not on PATH yet')"
 }
 
-write_starter_config() {
-    [ "${INSTALLCONFIG,,}" = "true" ] || return 0
-    local user home config
-    user="$(detect_user)"
-    if [ "$user" = "root" ]; then
-        home="/root"
-    else
-        home="$(getent passwd "$user" | cut -d: -f6)"
-    fi
-    config="${home}/.codex/config.toml"
-    if [ -f "$config" ]; then
-        echo "Existing ${config} found — leaving untouched."
-        return 0
-    fi
-    install -d -m 0755 "${home}/.codex"
-    cat > "$config" <<'TOML'
-# Starter Codex CLI configuration.
-# See https://github.com/openai/codex for the full schema.
-
-# model = "gpt-5-codex"
-# approval_policy = "on-request"
-# sandbox_mode = "workspace-write"
-TOML
-    if [ "$user" != "root" ]; then
-        chown -R "$user:$(id -gn "$user")" "${home}/.codex"
-    fi
-    echo "Wrote starter config to ${config}"
-}
-
 install_cxd_alias() {
     [ "${INSTALLCXDALIAS,,}" = "true" ] || return 0
     local alias_file="/etc/profile.d/codex-aliases.sh"
@@ -117,7 +76,6 @@ SH
 main() {
     install_node_if_missing
     install_codex
-    write_starter_config
     install_cxd_alias
     echo "codex feature install complete."
 }
