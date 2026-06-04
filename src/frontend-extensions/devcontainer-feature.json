@@ -1,0 +1,20 @@
+{
+  "id": "frontend-extensions",
+  "version": "1.0.0",
+  "name": "Frontend (Vue & React) VS Code Extensions",
+  "description": "Adds syntax highlighting / language support for common frontend stacks: Vue 3 (Volar), styled-components, and Tailwind CSS. React/JSX/TSX itself is already handled by VS Code's built-in TypeScript language server. Depends on dev-extensions.",
+  "documentationURL": "https://github.com/OrangeKing-Leo/devcontainer-features/tree/main/src/frontend-extensions",
+  "options": {},
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vue.volar",
+        "styled-components.vscode-styled-components",
+        "bradlc.vscode-tailwindcss"
+      ]
+    }
+  },
+  "dependsOn": {
+    "ghcr.io/orangeking-leo/devcontainer-features/dev-extensions:1": {}
+  }
+}
