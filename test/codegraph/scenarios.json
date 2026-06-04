@@ -4,15 +4,5 @@
         "features": {
             "codegraph": {}
         }
-    },
-    "with_claude_code": {
-        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
-        "remoteUser": "vscode",
-        "features": {
-            "claude-code": {},
-            "codegraph": {
-                "wireAgents": "claude-code"
-            }
-        }
     }
 }
