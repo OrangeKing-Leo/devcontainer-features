@@ -61,7 +61,9 @@ prepare_claude_home() {
         echo "Remote user '${user}' not present — skipping ~/.claude pre-create."
         return 0
     fi
-    install -d -o "$user" -g "$(id -gn "$user")" -m 0755 "${home}/.claude"
+    mkdir -p "${home}/.claude"
+    chown "${user}:$(id -gn "$user")" "${home}/.claude"
+    chmod 0755 "${home}/.claude"
     echo "Pre-created ${home}/.claude owned by ${user}"
 }
 

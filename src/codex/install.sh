@@ -60,7 +60,9 @@ prepare_codex_home() {
         echo "Remote user '${user}' not present — skipping ~/.codex pre-create."
         return 0
     fi
-    install -d -o "$user" -g "$(id -gn "$user")" -m 0755 "${home}/.codex"
+    mkdir -p "${home}/.codex"
+    chown "${user}:$(id -gn "$user")" "${home}/.codex"
+    chmod 0755 "${home}/.codex"
     echo "Pre-created ${home}/.codex owned by ${user}"
 }
 

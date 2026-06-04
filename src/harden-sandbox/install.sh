@@ -12,8 +12,14 @@ if [ "$(id -u)" -ne 0 ]; then
     exit 1
 fi
 
-detect_user() {
-    local candidates=("${_REMOTE_USER:-}" "${USERNAME:-}" vscode node codespace ubuntu)
+resolve_remote_user() {
+    # Prefer the dev container features framework's _REMOTE_USER, which is
+    # set from devcontainer.json remoteUser. Fall back to vscode (the most
+    # common non-root user on devcontainers/base images), then root. We
+    # deliberately do not consult the generic USERNAME env var here — it
+    # can be polluted during build (set to "root" or empty) and is not the
+    # canonical source.
+    local candidates=("${_REMOTE_USER:-}" vscode node codespace ubuntu)
     for u in "${candidates[@]}"; do
         if [ -n "$u" ] && id -u "$u" >/dev/null 2>&1; then
             echo "$u"
@@ -23,7 +29,7 @@ detect_user() {
     echo "root"
 }
 
-USER_NAME="$(detect_user)"
+USER_NAME="$(resolve_remote_user)"
 if [ "$USER_NAME" = "root" ]; then
     USER_HOME="/root"
 else
@@ -123,7 +129,9 @@ fi
 # (a) the user can write to it without sudo, and (b) this works even
 # under no-new-privileges where post-mount chown is impossible.
 if [ "${PERSISTSHELLHISTORY,,}" = "true" ] && [ "$USER_NAME" != "root" ]; then
-    install -d -o "$USER_NAME" -g "$USER_GROUP" -m 0755 /commandhistory
+    mkdir -p /commandhistory
+    chown "${USER_NAME}:${USER_GROUP}" /commandhistory
+    chmod 0755 /commandhistory
     echo "Pre-created /commandhistory owned by ${USER_NAME}"
 fi
 
