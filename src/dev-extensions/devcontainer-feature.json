@@ -1,0 +1,15 @@
+{
+  "id": "dev-extensions",
+  "version": "1.0.0",
+  "name": "Common Dev VS Code Extensions",
+  "description": "Installs GitLens — line-level git blame, file history, and code authorship insights directly in the VS Code editor gutter.",
+  "documentationURL": "https://github.com/OrangeKing-Leo/devcontainer-features/tree/main/src/dev-extensions",
+  "options": {},
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "eamodio.gitlens"
+      ]
+    }
+  }
+}

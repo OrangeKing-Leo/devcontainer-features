@@ -17,6 +17,7 @@ jobs:
           - codegraph
           - codex
           - harden-sandbox
+          - dev-extensions
         baseImage:
           - mcr.microsoft.com/devcontainers/base:ubuntu-24.04
     steps:
