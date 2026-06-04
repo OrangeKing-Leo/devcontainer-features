@@ -4,7 +4,7 @@ set -euo pipefail
 VERSION="${VERSION:-latest}"
 INSTALLNODE="${INSTALLNODE:-true}"
 NODEVERSION="${NODEVERSION:-20}"
-INSTALLCGIALIAS="${INSTALLCGIALIAS:-false}"
+INSTALLALIASES="${INSTALLALIASES:-false}"
 
 if [ "$(id -u)" -ne 0 ]; then
     echo "ERROR: install.sh must run as root." >&2
@@ -49,13 +49,14 @@ install_codegraph() {
     echo "Installed: $(codegraph --version 2>/dev/null || echo 'codegraph command not on PATH yet')"
 }
 
-install_cgi_alias() {
-    [ "${INSTALLCGIALIAS,,}" = "true" ] || return 0
+install_aliases() {
+    [ "${INSTALLALIASES,,}" = "true" ] || return 0
     local alias_file="/etc/profile.d/codegraph-aliases.sh"
     install -d -m 0755 /etc/profile.d
     cat > "$alias_file" <<'SH'
-# Injected by the codegraph dev container feature (installCgiAlias=true).
-alias cgi='codegraph init -i'
+# Injected by the codegraph dev container feature (installAliases=true).
+alias cgi='codegraph install'
+alias cgii='codegraph init -i'
 SH
     chmod 0644 "$alias_file"
     if [ -f /etc/bash.bashrc ] && ! grep -q "codegraph-aliases.sh" /etc/bash.bashrc; then
@@ -67,13 +68,13 @@ SH
             echo '[ -r /etc/profile.d/codegraph-aliases.sh ] && . /etc/profile.d/codegraph-aliases.sh' >> /etc/zsh/zshrc
         fi
     fi
-    echo "Installed 'cgi' alias to ${alias_file}"
+    echo "Installed 'cgi' / 'cgii' aliases to ${alias_file}"
 }
 
 main() {
     install_node_if_missing
     install_codegraph
-    install_cgi_alias
+    install_aliases
     echo "codegraph feature install complete."
 }
 

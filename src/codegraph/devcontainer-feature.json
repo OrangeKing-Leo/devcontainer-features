@@ -20,10 +20,10 @@
       "default": "20",
       "description": "Major Node.js version to install when installNode is true (e.g. '18', '20', '22')."
     },
-    "installCgiAlias": {
+    "installAliases": {
       "type": "boolean",
       "default": false,
-      "description": "Install a shell alias 'cgi' => 'codegraph init -i' system-wide (bash + zsh) for quickly initializing the index in a project."
+      "description": "Install shell aliases (bash + zsh) system-wide: 'cgi' => 'codegraph install' (wire MCP into installed agents) and 'cgii' => 'codegraph init -i' (initialize and index a project)."
     }
   },
   "installsAfter": [
