@@ -1,12 +1,12 @@
 {
     "default": {
-        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
         "features": {
             "claude-code": {}
         }
     },
     "with_settings": {
-        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
         "remoteUser": "vscode",
         "features": {
             "claude-code": {
