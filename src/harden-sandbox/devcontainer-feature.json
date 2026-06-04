@@ -1,0 +1,75 @@
+{
+  "id": "harden-sandbox",
+  "version": "1.0.0",
+  "name": "Harden Dev Container Sandbox",
+  "description": "Hardens the dev container sandbox: blocks credential leaks (GH_TOKEN, SSH agent, git askpass), unsets host IPC variables, sets git safe.directory, and writes Claude Code onboarding flag. Pair with runArgs cap-drop and named volume mounts in your devcontainer.json for full isolation.",
+  "documentationURL": "https://github.com/OrangeKing-Leo/devcontainer-features/tree/main/src/harden-sandbox",
+  "options": {
+    "unsetHostIpc": {
+      "type": "boolean",
+      "default": true,
+      "description": "Write /etc/profile.d/99-harden-sandbox.sh to unset VS Code / remote-containers / GPG / display IPC env vars in interactive shells."
+    },
+    "writeOnboardingFlag": {
+      "type": "boolean",
+      "default": true,
+      "description": "Write ~/.claude.json with hasCompletedOnboarding=true so Claude Code skips the first-run prompt."
+    },
+    "addGitSafeDirectory": {
+      "type": "boolean",
+      "default": true,
+      "description": "Add /workspace (and the detected workspace path) as a global git safe.directory to avoid 'dubious ownership' errors on bind-mounted repos."
+    },
+    "disableCoreDumps": {
+      "type": "boolean",
+      "default": true,
+      "description": "Set 'ulimit -c 0' in /etc/profile.d so processes cannot leave core dumps (which may contain in-memory secrets) on disk."
+    },
+    "persistShellHistory": {
+      "type": "boolean",
+      "default": true,
+      "description": "Redirect bash/zsh HISTFILE to /commandhistory/.shell_history when /commandhistory exists (pairs with a named-volume mount in your devcontainer.json)."
+    }
+  },
+  "init": true,
+  "securityOpt": [
+    "no-new-privileges"
+  ],
+  "containerEnv": {
+    "POWERLEVEL9K_DISABLE_GITSTATUS": "true",
+    "GIT_TERMINAL_PROMPT": "0",
+    "SSH_AUTH_SOCK": "",
+    "GIT_ASKPASS": "/bin/false",
+    "VSCODE_GIT_ASKPASS_MAIN": "",
+    "VSCODE_GIT_ASKPASS_NODE": "",
+    "VSCODE_GIT_ASKPASS_EXTRA_ARGS": "",
+    "GH_TOKEN": "",
+    "GITHUB_TOKEN": "",
+    "GIT_CONFIG_COUNT": "1",
+    "GIT_CONFIG_KEY_0": "credential.helper",
+    "GIT_CONFIG_VALUE_0": "/bin/false",
+    "AWS_ACCESS_KEY_ID": "",
+    "AWS_SECRET_ACCESS_KEY": "",
+    "AWS_SESSION_TOKEN": "",
+    "AWS_PROFILE": "",
+    "GOOGLE_APPLICATION_CREDENTIALS": "",
+    "GCLOUD_PROJECT": "",
+    "KUBECONFIG": "",
+    "DOCKER_HOST": "",
+    "DOCKER_TLS_VERIFY": "",
+    "DOCKER_CERT_PATH": "",
+    "NPM_TOKEN": ""
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "github.gitAuthentication": false,
+        "git.terminalAuthentication": false,
+        "git.useIntegratedAskPass": false
+      }
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/common-utils"
+  ]
+}
