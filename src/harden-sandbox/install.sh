@@ -123,16 +123,20 @@ if [ "${ADDGITSAFEDIRECTORY,,}" = "true" ]; then
     fi
 fi
 
-# ---------- 4. Pre-create /commandhistory owned by remote user ----------
-# A named-volume mount inherits ownership from the dir that exists inside
-# the image at first start. We create it here while still root so that
-# (a) the user can write to it without sudo, and (b) this works even
-# under no-new-privileges where post-mount chown is impossible.
-if [ "${PERSISTSHELLHISTORY,,}" = "true" ] && [ "$USER_NAME" != "root" ]; then
+# ---------- 4. Pre-create /commandhistory for shell history volume ----------
+# A named-volume mount inherits the dir's mode/ownership from the image at
+# first start. /commandhistory lives OUTSIDE the user's home, so the dev
+# container CLI's updateRemoteUserUID helper won't touch it — chowning to
+# a specific build-time UID is fragile if the runtime UID differs.
+#
+# Use sticky world-writable (mode 1777, same as /tmp) so any single remote
+# user inside the sandbox can write to it regardless of UID, while the
+# sticky bit still prevents cross-user file deletion. Acceptable for shell
+# history in a single-user sandboxed container.
+if [ "${PERSISTSHELLHISTORY,,}" = "true" ]; then
     mkdir -p /commandhistory
-    chown "${USER_NAME}:${USER_GROUP}" /commandhistory
-    chmod 0755 /commandhistory
-    echo "Pre-created /commandhistory owned by ${USER_NAME}"
+    chmod 1777 /commandhistory
+    echo "Pre-created /commandhistory (mode 1777, sticky world-writable)"
 fi
 
 echo "harden-sandbox feature install complete."
