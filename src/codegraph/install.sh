@@ -13,13 +13,13 @@ fi
 
 apt_get_update() {
     if [ "$(find /var/lib/apt/lists/* 2>/dev/null | wc -l)" = "0" ]; then
-        apt-get update -y
+        apt-get -o Acquire::Retries=5 update -y
     fi
 }
 
 ensure_pkgs() {
     apt_get_update
-    apt-get install -y --no-install-recommends "$@"
+    apt-get -o Acquire::Retries=5 install -y --no-install-recommends "$@"
 }
 
 detect_user() {
