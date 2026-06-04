@@ -21,3 +21,4 @@ Installs [CodeGraph](https://github.com/colbymchenry/codegraph) — a pre-indexe
 | `installNode` | Install Node.js (via NodeSource) when `node` is missing on PATH.                                                                                           | boolean | `true`   |
 | `nodeVersion` | Major Node.js version used when `installNode` is true.                                                                                                     | string  | `20`     |
 | `wireAgents`  | Run `codegraph install --target <value> --yes` at build to wire MCP server into an agent. One of `none`, `all`, `claude-code`, `codex`, `cursor`, `opencode`, `hermes`, `gemini`, `antigravity`, `kiro`. | string  | `none`   |
+| `installCgiAlias` | Install shell alias `cgi` → `codegraph init -i` (bash + zsh) for fast project setup.                                                                  | boolean | `false`  |

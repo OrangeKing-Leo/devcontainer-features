@@ -4,5 +4,14 @@
         "features": {
             "codegraph": {}
         }
+    },
+    "with_cgi_alias": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+        "remoteUser": "vscode",
+        "features": {
+            "codegraph": {
+                "installCgiAlias": true
+            }
+        }
     }
 }

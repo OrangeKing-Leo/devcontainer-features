@@ -24,6 +24,11 @@
       "type": "boolean",
       "default": false,
       "description": "Write a starter ~/.claude/settings.json for the remote user if one does not exist."
+    },
+    "installCcdAlias": {
+      "type": "boolean",
+      "default": false,
+      "description": "Install a shell alias 'ccd' => 'claude --dangerously-skip-permissions' system-wide (bash + zsh). DANGEROUS: bypasses Claude Code's permission prompts. Only enable inside a hardened sandbox."
     }
   },
   "installsAfter": [

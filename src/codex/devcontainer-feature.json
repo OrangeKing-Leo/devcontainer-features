@@ -24,6 +24,11 @@
       "type": "boolean",
       "default": false,
       "description": "Write a starter ~/.codex/config.toml for the remote user if one does not exist."
+    },
+    "installCxdAlias": {
+      "type": "boolean",
+      "default": false,
+      "description": "Install a shell alias 'cxd' => 'codex --dangerously-bypass-approvals-and-sandbox' system-wide (bash + zsh). DANGEROUS: bypasses Codex approval prompts and sandbox restrictions. Only enable inside a hardened sandbox."
     }
   },
   "installsAfter": [

@@ -5,6 +5,7 @@ VERSION="${VERSION:-latest}"
 INSTALLNODE="${INSTALLNODE:-true}"
 NODEVERSION="${NODEVERSION:-20}"
 INSTALLCONFIG="${INSTALLCONFIG:-false}"
+INSTALLCXDALIAS="${INSTALLCXDALIAS:-false}"
 
 if [ "$(id -u)" -ne 0 ]; then
     echo "ERROR: install.sh must run as root." >&2
@@ -89,10 +90,35 @@ TOML
     echo "Wrote starter config to ${config}"
 }
 
+install_cxd_alias() {
+    [ "${INSTALLCXDALIAS,,}" = "true" ] || return 0
+    local alias_file="/etc/profile.d/codex-aliases.sh"
+    install -d -m 0755 /etc/profile.d
+    cat > "$alias_file" <<'SH'
+# Injected by the codex dev container feature (installCxdAlias=true).
+# WARNING: --dangerously-bypass-approvals-and-sandbox skips both Codex's
+# approval prompts and sandbox restrictions. Only meaningful inside an
+# isolated container.
+alias cxd='codex --dangerously-bypass-approvals-and-sandbox'
+SH
+    chmod 0644 "$alias_file"
+    if [ -f /etc/bash.bashrc ] && ! grep -q "codex-aliases.sh" /etc/bash.bashrc; then
+        echo '[ -r /etc/profile.d/codex-aliases.sh ] && . /etc/profile.d/codex-aliases.sh' >> /etc/bash.bashrc
+    fi
+    if command -v zsh >/dev/null 2>&1; then
+        install -d -m 0755 /etc/zsh
+        if ! grep -q "codex-aliases.sh" /etc/zsh/zshrc 2>/dev/null; then
+            echo '[ -r /etc/profile.d/codex-aliases.sh ] && . /etc/profile.d/codex-aliases.sh' >> /etc/zsh/zshrc
+        fi
+    fi
+    echo "Installed 'cxd' alias to ${alias_file}"
+}
+
 main() {
     install_node_if_missing
     install_codex
     write_starter_config
+    install_cxd_alias
     echo "codex feature install complete."
 }
 

@@ -25,6 +25,11 @@
       "enum": ["none", "all", "claude-code", "codex", "cursor", "opencode", "hermes", "gemini", "antigravity", "kiro"],
       "default": "none",
       "description": "Run `codegraph install --target <value> --yes` at build time to wire CodeGraph's MCP server into the chosen agent(s). 'none' skips wiring; 'all' wires every detected agent. Note: agents must already be installed in the image for wiring to succeed."
+    },
+    "installCgiAlias": {
+      "type": "boolean",
+      "default": false,
+      "description": "Install a shell alias 'cgi' => 'codegraph init -i' system-wide (bash + zsh) for quickly initializing the index in a project."
     }
   },
   "installsAfter": [
