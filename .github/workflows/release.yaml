@@ -22,17 +22,3 @@ jobs:
           generate-docs: "true"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create PR for doc updates
-        id: cpr
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          add-paths: |
-            src/**/README.md
-          commit-message: "Automated documentation update"
-          branch: automated-documentation-update
-          delete-branch: true
-          title: "Automated documentation update"
-          body: |
-            Automated changes by the [Release dev container features & generate docs](https://github.com/${{ github.repository }}/actions/workflows/release.yaml) workflow.

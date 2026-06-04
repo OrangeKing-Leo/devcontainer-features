@@ -29,7 +29,6 @@
   },
   "installsAfter": [
     "ghcr.io/devcontainers/features/common-utils",
-    "ghcr.io/devcontainers/features/node",
-    "ghcr.io/orangeking-leo/devcontainer-features/claude-code"
+    "ghcr.io/devcontainers/features/node"
   ]
 }
