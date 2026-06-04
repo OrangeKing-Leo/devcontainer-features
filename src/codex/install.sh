@@ -49,6 +49,21 @@ install_codex() {
     echo "Installed: $(codex --version 2>/dev/null || echo 'codex command not on PATH yet')"
 }
 
+prepare_codex_home() {
+    # Pre-create ~/.codex owned by the remote user so a named-volume mount
+    # inherits correct ownership on first container start. Must happen at
+    # build time because the harden-sandbox feature's no-new-privileges
+    # securityOpt prevents any post-mount chown via sudo.
+    local user="${_REMOTE_USER:-vscode}"
+    local home="${_REMOTE_USER_HOME:-/home/${user}}"
+    if ! id -u "$user" >/dev/null 2>&1; then
+        echo "Remote user '${user}' not present — skipping ~/.codex pre-create."
+        return 0
+    fi
+    install -d -o "$user" -g "$(id -gn "$user")" -m 0755 "${home}/.codex"
+    echo "Pre-created ${home}/.codex owned by ${user}"
+}
+
 install_cxd_alias() {
     [ "${INSTALLCXDALIAS,,}" = "true" ] || return 0
     local alias_file="/etc/profile.d/codex-aliases.sh"
@@ -76,6 +91,7 @@ SH
 main() {
     install_node_if_missing
     install_codex
+    prepare_codex_home
     install_cxd_alias
     echo "codex feature install complete."
 }

@@ -117,4 +117,14 @@ if [ "${ADDGITSAFEDIRECTORY,,}" = "true" ]; then
     fi
 fi
 
+# ---------- 4. Pre-create /commandhistory owned by remote user ----------
+# A named-volume mount inherits ownership from the dir that exists inside
+# the image at first start. We create it here while still root so that
+# (a) the user can write to it without sudo, and (b) this works even
+# under no-new-privileges where post-mount chown is impossible.
+if [ "${PERSISTSHELLHISTORY,,}" = "true" ] && [ "$USER_NAME" != "root" ]; then
+    install -d -o "$USER_NAME" -g "$USER_GROUP" -m 0755 /commandhistory
+    echo "Pre-created /commandhistory owned by ${USER_NAME}"
+fi
+
 echo "harden-sandbox feature install complete."

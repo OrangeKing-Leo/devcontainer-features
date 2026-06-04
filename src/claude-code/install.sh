@@ -49,6 +49,22 @@ install_claude_code() {
     echo "Installed: $(claude --version 2>/dev/null || echo 'claude command not on PATH yet')"
 }
 
+prepare_claude_home() {
+    # Pre-create ~/.claude owned by the remote user so a named-volume mount
+    # (e.g. claude-config-${devcontainerId}) inherits correct ownership on
+    # first container start. This must happen at build time because the
+    # harden-sandbox feature's no-new-privileges securityOpt prevents any
+    # post-mount chown via sudo.
+    local user="${_REMOTE_USER:-vscode}"
+    local home="${_REMOTE_USER_HOME:-/home/${user}}"
+    if ! id -u "$user" >/dev/null 2>&1; then
+        echo "Remote user '${user}' not present — skipping ~/.claude pre-create."
+        return 0
+    fi
+    install -d -o "$user" -g "$(id -gn "$user")" -m 0755 "${home}/.claude"
+    echo "Pre-created ${home}/.claude owned by ${user}"
+}
+
 install_ccd_alias() {
     [ "${INSTALLCCDALIAS,,}" = "true" ] || return 0
     local alias_file="/etc/profile.d/claude-code-aliases.sh"
@@ -77,6 +93,7 @@ SH
 main() {
     install_node_if_missing
     install_claude_code
+    prepare_claude_home
     install_ccd_alias
     echo "claude-code feature install complete."
 }

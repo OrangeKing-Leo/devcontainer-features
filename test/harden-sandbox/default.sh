@@ -15,5 +15,7 @@ check "profile.d disables core dumps" bash -c "grep -q 'ulimit -c 0' /etc/profil
 check "profile.d unsets VSCODE IPC"   bash -c "grep -q 'VSCODE_IPC_HOOK_CLI' /etc/profile.d/99-harden-sandbox.sh"
 check "onboarding flag exists"        bash -c "test -f /home/vscode/.claude.json"
 check "git safe.directory set"        bash -c "git config --system --get-all safe.directory | grep -q '\\*'"
+check "commandhistory pre-created"    bash -c "test -d /commandhistory"
+check "commandhistory owned by vscode" bash -c "[ \"\$(stat -c '%U' /commandhistory)\" = vscode ]"
 
 reportResults
