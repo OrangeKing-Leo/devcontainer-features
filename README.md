@@ -8,15 +8,15 @@ Additions to the official [Dev Container Features](https://containers.dev/featur
 
 | Feature | What it does |
 |---------|--------------|
-| [`claude-code`](./src/claude-code) | Installs Anthropic's Claude Code CLI (`@anthropic-ai/claude-code`) via npm. Optional Node bootstrap and `ccd` shell alias. |
-| [`codex`](./src/codex) | Installs OpenAI's Codex CLI (`@openai/codex`) via npm. Optional Node bootstrap and `cxd` shell alias. |
+| [`claude-code`](./src/claude-code) | Installs Anthropic's Claude Code CLI (`@anthropic-ai/claude-code`) via npm. Pre-creates `~/.claude` owned by the remote user (so named-volume mounts inherit correct ownership). Optional Node bootstrap and `ccd` shell alias. |
+| [`codex`](./src/codex) | Installs OpenAI's Codex CLI (`@openai/codex`) via npm. Pre-creates `~/.codex` owned by the remote user. Optional Node bootstrap and `cxd` shell alias. |
 | [`codegraph`](./src/codegraph) | Installs [CodeGraph](https://github.com/colbymchenry/codegraph) (`@colbymchenry/codegraph`) — pre-indexed code knowledge graph for Claude Code, Codex, Cursor, Gemini, OpenCode, Antigravity, Kiro, Hermes. Optional `cgi` / `cgii` shell aliases. |
 
 ### Sandbox & editor
 
 | Feature | What it does |
 |---------|--------------|
-| [`harden-sandbox`](./src/harden-sandbox) | Blanks credential env vars (GH/GITHUB/AWS/GCP/k8s/Docker tokens, SSH agent, askpass), forces `credential.helper=/bin/false`, sets `no-new-privileges` + `init`, unsets host IPC sockets in interactive shells, disables core dumps, persists shell history, writes Claude Code onboarding flag, and adds `safe.directory='*'`. |
+| [`harden-sandbox`](./src/harden-sandbox) | Blanks credential env vars (GH/GITHUB/AWS/GCP/k8s/Docker tokens, SSH agent, askpass), forces `credential.helper=/bin/false`, sets `no-new-privileges` + `init`, unsets host IPC sockets in interactive shells, disables core dumps, persists shell history (pre-creates `/commandhistory` mode 1777), writes Claude Code onboarding flag, and adds `safe.directory='*'`. |
 | [`dev-extensions`](./src/dev-extensions) | Universal VS Code extensions: GitLens (line-level git blame), Simplified Chinese language pack, Markdown Mermaid preview. |
 | [`frontend-extensions`](./src/frontend-extensions) | Vue 3 (Volar) + styled-components + Tailwind CSS extensions. Depends on `dev-extensions`. |
 
@@ -84,6 +84,7 @@ This gives you:
 - VS Code's askpass and GitHub-auth integrations disabled
 - `ccd` / `cxd` for one-shot agent runs without permission prompts (safe because the sandbox is locked down)
 - `cgi` / `cgii` to wire CodeGraph into agents and bootstrap a project index
+- Build-time pre-creation of `~/.claude`, `~/.codex`, and `/commandhistory` so named-volume mounts come up with the right ownership/permissions on first start — no post-mount `chown` needed (which `no-new-privileges` would block anyway)
 
 ## How publishing works
 
