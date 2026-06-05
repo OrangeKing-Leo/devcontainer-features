@@ -1,6 +1,6 @@
 {
   "id": "codegraph",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "name": "CodeGraph CLI",
   "description": "Installs the CodeGraph CLI (@colbymchenry/codegraph) — a pre-indexed code knowledge graph for Claude Code, Codex, Cursor, Gemini, OpenCode, Antigravity, Kiro, and Hermes Agent.",
   "documentationURL": "https://github.com/OrangeKing-Leo/devcontainer-features/tree/main/src/codegraph",

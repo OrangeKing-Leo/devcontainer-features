@@ -1,6 +1,6 @@
 {
   "id": "harden-sandbox",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "name": "Harden Dev Container Sandbox",
   "description": "Hardens the dev container sandbox: blocks credential leaks (GH_TOKEN, SSH agent, git askpass), unsets host IPC variables, sets git safe.directory, and writes Claude Code onboarding flag. Pair with runArgs cap-drop and named volume mounts in your devcontainer.json for full isolation.",
   "documentationURL": "https://github.com/OrangeKing-Leo/devcontainer-features/tree/main/src/harden-sandbox",
