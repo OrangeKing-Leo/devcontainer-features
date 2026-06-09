@@ -9,7 +9,7 @@ Additions to the official [Dev Container Features](https://containers.dev/featur
 | Feature | What it does |
 |---------|--------------|
 | [`claude-code`](./src/claude-code) | Installs Anthropic's Claude Code CLI (`@anthropic-ai/claude-code`) via npm under a per-user prefix (`~/.npm-global`) so the built-in auto-updater can write without root. Pre-creates `~/.claude` owned by the remote user (so named-volume mounts inherit correct ownership). Optional Node bootstrap and `ccd` shell alias. |
-| [`codex`](./src/codex) | Installs OpenAI's Codex CLI (`@openai/codex`) via npm. Pre-creates `~/.codex` owned by the remote user. Optional Node bootstrap and `cxd` shell alias. |
+| [`codex`](./src/codex) | Installs OpenAI's Codex CLI (`@openai/codex`) via npm under a per-user prefix (`~/.npm-global`) so the built-in auto-updater can write without root. Pre-creates `~/.codex` owned by the remote user. Optional Node bootstrap and `cxd` shell alias. |
 | [`codegraph`](./src/codegraph) | Installs [CodeGraph](https://github.com/colbymchenry/codegraph) (`@colbymchenry/codegraph`) — pre-indexed code knowledge graph for Claude Code, Codex, Cursor, Gemini, OpenCode, Antigravity, Kiro, Hermes. Optional `cgi` / `cgii` shell aliases. |
 
 ### Sandbox & editor

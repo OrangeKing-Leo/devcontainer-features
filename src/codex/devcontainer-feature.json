@@ -1,6 +1,6 @@
 {
   "id": "codex",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "name": "OpenAI Codex CLI",
   "description": "Installs OpenAI's Codex CLI (@openai/codex) via npm, with optional Node.js auto-install.",
   "documentationURL": "https://github.com/OrangeKing-Leo/devcontainer-features/tree/main/src/codex",
