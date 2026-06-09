@@ -22,9 +22,13 @@ claude login
 
 to authenticate interactively. Credentials are stored under `~/.claude` for the remote user.
 
-## Pinning the version
+## Install location & auto-update
 
-`CLAUDE_CODE_AUTO_UPDATE=0` is exported via `containerEnv` so the version installed at build time is not silently replaced at runtime. To upgrade, rebuild the container after bumping the `version` option.
+Claude Code is installed under a per-user npm prefix (`~/.npm-global`) rather than the system-wide `/usr/lib/node_modules`. The feature writes `~/.npmrc` with `prefix=${HOME}/.npm-global` and adds `$HOME/.npm-global/bin` to `PATH` via `/etc/profile.d/claude-code-path.sh`.
+
+The reason: Claude Code's built-in auto-updater writes to its install directory. A root-owned system install leaves the updater unable to write as the (non-root) remote user. The user-local prefix fixes this without granting the remote user write access to system paths.
+
+To pin a specific version, set the `version` option (`latest` by default) — but note that the auto-updater may still bump it at runtime.
 
 ## Per-user configuration
 
