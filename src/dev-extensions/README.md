@@ -1,8 +1,7 @@
-# Common Dev VS Code Extensions (`dev-extensions`)
 
-Installs [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens) — line-level git blame, file history, and code authorship insights inside the VS Code editor.
+# Common Dev VS Code Extensions (dev-extensions)
 
-Only affects VS Code / Cursor / Codespaces. Pure CLI users see no effect.
+Installs GitLens (line-level git blame, file history, code authorship), the VS Code Simplified Chinese language pack, and Mermaid diagram rendering in the Markdown preview.
 
 ## Example Usage
 
@@ -14,10 +13,39 @@ Only affects VS Code / Cursor / Codespaces. Pure CLI users see no effect.
 
 ## Options
 
-No options. The feature declares a single extension in `customizations.vscode.extensions` and VS Code installs it on attach.
+| Options Id | Description | Type | Default Value |
+|-----|-----|-----|-----|
 
-## Bundled extensions
 
-- `eamodio.gitlens` — hover over any line to see who last changed it, when, and in which commit; built-in file history, blame annotations, and side-by-side diff against any revision.
-- `ms-ceintl.vscode-language-pack-zh-hans` — Simplified Chinese (简体中文) UI translation for VS Code. To activate, run the command `Configure Display Language` and pick `zh-cn`, then reload.
-- `bierner.markdown-mermaid` — render Mermaid diagrams (`flowchart`, `sequenceDiagram`, etc.) inside VS Code's built-in Markdown preview.
+## Customizations
+
+### VS Code Extensions
+
+- `eamodio.gitlens`
+- `ms-ceintl.vscode-language-pack-zh-hans`
+- `bierner.markdown-mermaid`
+
+## Scope
+
+Metadata-only feature — `install.sh` is a no-op. VS Code reads `customizations.vscode.extensions` from the feature manifest and installs GitLens after the container starts.
+
+## Editor compatibility
+
+- **VS Code, Cursor, GitHub Codespaces** — GitLens installs automatically.
+- **Pure CLI / SSH** without a VS Code-family editor attached — feature is a no-op.
+- **JetBrains Gateway / other editors** — ignores `customizations.vscode.*`; no effect.
+
+## Why so few extensions?
+
+By design. This feature only bundles GitLens because:
+
+1. **Universal value** — every developer benefits from line-level blame, regardless of language.
+2. **Zero side-effects** — GitLens doesn't change formatting, linting, or save behaviour.
+3. **No opinion creep** — Prettier, ESLint, language servers, etc. belong to language-specific features (e.g. a frontend feature), not a base bundle.
+
+To add more extensions, list them in your project's `devcontainer.json` under `customizations.vscode.extensions`; they merge with this feature's set.
+
+
+---
+
+_Note: This file was auto-generated from the [devcontainer-feature.json](devcontainer-feature.json).  Add additional notes to a `NOTES.md`._

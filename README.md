@@ -1,6 +1,6 @@
 # devcontainer-features
 
-Additions to the official [Dev Container Features](https://containers.dev/features), focused on AI coding agents (Claude Code / Codex / CodeGraph) and a hardened, opinionated dev-container experience.
+Additions to the official [Dev Container Features](https://containers.dev/features), focused on AI coding agents (Codex / CodeGraph) and a hardened, opinionated dev-container experience.
 
 ## Features
 
@@ -8,8 +8,7 @@ Additions to the official [Dev Container Features](https://containers.dev/featur
 
 | Feature | What it does |
 |---------|--------------|
-| [`claude-code`](./src/claude-code) | Installs Anthropic's Claude Code CLI (`@anthropic-ai/claude-code`) via npm under a per-user prefix (`~/.npm-global`) so the built-in auto-updater can write without root. Pre-creates `~/.claude` owned by the remote user (so named-volume mounts inherit correct ownership). Optional Node bootstrap and `ccd` shell alias. |
-| [`codex`](./src/codex) | Installs OpenAI's Codex CLI (`@openai/codex`) via npm under a per-user prefix (`~/.npm-global`) so the built-in auto-updater can write without root. Pre-creates `~/.codex` owned by the remote user. Optional Node bootstrap and `cxd` shell alias. |
+| [`codex`](./src/codex) | Installs the OpenAI Codex CLI (`@openai/codex`) globally via npm, mirroring the official [anthropics/devcontainer-features](https://github.com/anthropics/devcontainer-features) claude-code feature. Auto-installs Node.js 22 (apt/apk/dnf/yum) when missing, and adds the `openai.chatgpt` VS Code extension. |
 | [`codegraph`](./src/codegraph) | Installs [CodeGraph](https://github.com/colbymchenry/codegraph) (`@colbymchenry/codegraph`) — pre-indexed code knowledge graph for Claude Code, Codex, Cursor, Gemini, OpenCode, Antigravity, Kiro, Hermes. Optional `cgi` / `cgii` shell aliases. |
 
 ### Sandbox & editor
@@ -28,7 +27,6 @@ Reference any feature in your `devcontainer.json` via its `ghcr.io` ref:
 {
     "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
     "features": {
-        "ghcr.io/orangeking-leo/devcontainer-features/claude-code:1": {},
         "ghcr.io/orangeking-leo/devcontainer-features/codex:1": {},
         "ghcr.io/orangeking-leo/devcontainer-features/codegraph:1": {},
         "ghcr.io/orangeking-leo/devcontainer-features/dev-extensions:1": {}
@@ -36,11 +34,11 @@ Reference any feature in your `devcontainer.json` via its `ghcr.io` ref:
 }
 ```
 
-After the container builds, run `claude login` / `codex login` once to authenticate.
+After the container builds, run `codex login` once to authenticate (or set `OPENAI_API_KEY` via `remoteEnv` / `containerEnv`).
 
 ## Recommended: hardened AI sandbox
 
-If you want an isolated container for letting Claude Code / Codex run with permission bypass, combine `harden-sandbox` with the dangerous-alias options and the `runArgs` / mounts that Features cannot set themselves:
+If you want an isolated container for letting AI agents run with relaxed approvals, combine `harden-sandbox` with the `runArgs` / mounts that Features cannot set themselves:
 
 ```jsonc
 {
@@ -55,9 +53,8 @@ If you want an isolated container for letting Claude Code / Codex run with permi
     "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
 
     "mounts": [
-        { "source": "claude-config-${devcontainerId}",  "target": "/home/vscode/.claude",             "type": "volume" },
-        { "source": "claude-data-${devcontainerId}",    "target": "/home/vscode/.local/share/claude", "type": "volume" },
-        { "source": "shell-history-${devcontainerId}",  "target": "/commandhistory",                  "type": "volume" }
+        { "source": "codex-config-${devcontainerId}",  "target": "/home/vscode/.codex", "type": "volume" },
+        { "source": "shell-history-${devcontainerId}", "target": "/commandhistory",     "type": "volume" }
     ],
 
     "remoteEnv": {
@@ -70,9 +67,8 @@ If you want an isolated container for letting Claude Code / Codex run with permi
 
     "features": {
         "ghcr.io/orangeking-leo/devcontainer-features/harden-sandbox:1": {},
-        "ghcr.io/orangeking-leo/devcontainer-features/claude-code:1":   { "installCcdAlias": true },
-        "ghcr.io/orangeking-leo/devcontainer-features/codex:1":         { "installCxdAlias": true },
-        "ghcr.io/orangeking-leo/devcontainer-features/codegraph:1":     { "installAliases": true },
+        "ghcr.io/orangeking-leo/devcontainer-features/codex:1":          {},
+        "ghcr.io/orangeking-leo/devcontainer-features/codegraph:1":      { "installAliases": true },
         "ghcr.io/orangeking-leo/devcontainer-features/dev-extensions:1": {}
     }
 }
@@ -82,9 +78,8 @@ This gives you:
 - `cap-drop=ALL` + `no-new-privileges` + `init` + named volume persistence
 - All host credentials neutralized inside the container
 - VS Code's askpass and GitHub-auth integrations disabled
-- `ccd` / `cxd` for one-shot agent runs without permission prompts (safe because the sandbox is locked down)
 - `cgi` / `cgii` to wire CodeGraph into agents and bootstrap a project index
-- Build-time pre-creation of `~/.claude`, `~/.codex`, and `/commandhistory` so named-volume mounts come up with the right ownership/permissions on first start — no post-mount `chown` needed (which `no-new-privileges` would block anyway)
+- Build-time pre-creation of `/commandhistory` so the named-volume mount comes up with the right permissions on first start — no post-mount `chown` needed (which `no-new-privileges` would block anyway)
 
 ## How publishing works
 
@@ -96,7 +91,7 @@ Pushed to `ghcr.io/orangeking-leo/devcontainer-features/<feature>:1` via the [`r
 # Run a feature's tests locally without pushing
 npm i -g @devcontainers/cli
 devcontainer features test \
-    --features claude-code \
+    --features codex \
     --base-image mcr.microsoft.com/devcontainers/base:ubuntu-24.04 \
     .
 ```
@@ -105,7 +100,7 @@ You can also reference a local feature path directly from a project's `devcontai
 
 ```jsonc
 "features": {
-    "./src/claude-code": { "installCcdAlias": true }
+    "./src/codex": {}
 }
 ```
 

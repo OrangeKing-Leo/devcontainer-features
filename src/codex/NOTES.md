@@ -1,27 +1,40 @@
-## OS Support
-
-Targets Debian/Ubuntu based images (uses `apt-get`). Tested on:
-
-- `mcr.microsoft.com/devcontainers/base:ubuntu`
-- `mcr.microsoft.com/devcontainers/base:debian`
-
-Not supported on Alpine.
+# Using Codex in devcontainers
 
 ## Requirements
 
-- Node.js 18 or newer. If `node` is not on `PATH`, the feature installs Node via NodeSource (controlled by `installNode` / `nodeVersion`).
-- Outbound access to `registry.npmjs.org` (and `deb.nodesource.com` when Node is auto-installed).
+This feature requires Node.js and npm to be available in the container. You need to either:
+
+1. Use a base container image that includes Node.js, or
+2. Add the Node.js feature to your devcontainer.json
+3. Let this feature attempt to install Node.js automatically (best-effort, works on Debian/Ubuntu, Alpine, Fedora, RHEL, and CentOS)
+
+Note: When auto-installing Node.js, a compatible LTS version (Node.js 22.x) will be used, since `@openai/codex` requires Node.js 20 or newer.
+
+## Recommended configuration
+
+For most setups, we recommend explicitly adding both features:
+
+```json
+"features": {
+    "ghcr.io/devcontainers/features/node:1": {},
+    "ghcr.io/orangeking-leo/devcontainer-features/codex:1": {}
+}
+```
+
+## Using with containers that already have Node.js
+
+If your container already has Node.js installed (for example, a container based on a Node.js image or one using nvm), you can use the Codex feature directly without adding the Node.js feature:
+
+```json
+"features": {
+    "ghcr.io/orangeking-leo/devcontainer-features/codex:1": {}
+}
+```
+
+## Using with nvm
+
+When using with containers that have nvm pre-installed, you can use the Codex feature directly, and it will use the existing Node.js installation.
 
 ## Authentication
 
-No credentials are baked into the image. After the container starts, run:
-
-```bash
-codex login
-```
-
-to authenticate interactively (ChatGPT account or `OPENAI_API_KEY`). Credentials are stored under `~/.codex` for the remote user. To use an API key non-interactively, set `OPENAI_API_KEY` via your `devcontainer.json` `remoteEnv` / `containerEnv`.
-
-## Per-user configuration
-
-Codex reads `~/.codex/config.toml` for default `model`, `approval_policy`, `sandbox_mode`, etc. This feature does not seed that file — manage it yourself or let `codex` write its own on first run. See the [Codex docs](https://github.com/openai/codex) for the full schema.
+No credentials are baked into the image. After the container starts, run `codex login` once to authenticate (ChatGPT account), or set `OPENAI_API_KEY` via `remoteEnv` / `containerEnv` in your devcontainer.json.

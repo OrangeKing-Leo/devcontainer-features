@@ -1,17 +1,9 @@
 {
-    "default": {
-        "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+    "basic": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
+            "ghcr.io/devcontainers/features/node:1": {},
             "codex": {}
-        }
-    },
-    "with_cxd_alias": {
-        "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
-        "remoteUser": "vscode",
-        "features": {
-            "codex": {
-                "installCxdAlias": true
-            }
         }
     }
 }
